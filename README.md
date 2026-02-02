@@ -51,21 +51,6 @@ SmartIVREmbedding.connect(systemData)
 
 ```
 
-## Advanced Options
-
-### Customizing the Popup Size
-
-```javascript
-SmartIVREmbedding.openPopup(systemData, {
-  width: 600,
-  height: 700
-})
-  .then(result => {
-    // ...
-  });
-
-```
-
 ## API Reference
 
 ### `SmartIVREmbedding.connect(systemData, options)`
@@ -97,24 +82,3 @@ SmartIVREmbedding.openPopup(systemData, {
 * `systemId` (string): The system identifier.
 * `connectionLink` (string): Direct login link to the system.
 * `system` (Object): Full system details.
-
-**Example:**
-
-```javascript
-const result = await SmartIVREmbedding.connect({
-  username: '0770000000',
-  password: 'password123',
-  systemId: '507f1f77bcf86cd799439011'
-});
-
-if (result) {
-  if (result.connected) {
-    // System exists - redirect to link
-    window.location.href = result.connectionLink;
-  } else {
-    // New embedding completed
-    console.log('Embedding complete:', result.connectionLink);
-  }
-}
-
-```
