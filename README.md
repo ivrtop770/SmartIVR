@@ -19,9 +19,9 @@
 const systemData = {
   username: '0770000000',
   password: 'password123',
-  apiKey: null, // או מפתח API
-  systemId: '507f1f77bcf86cd799439011', // _ID מהמסד נתונים
-  name: 'מערכת ייצור'
+  apiKey: null,
+  systemId: '507f1f77bcf86cd799439011', 
+  name: 'MyIvr'
 };
 
 // חיבור למערכת - בודק אם קיימת, אם כן מחזיר קישור, אחרת פותח הטמעה
