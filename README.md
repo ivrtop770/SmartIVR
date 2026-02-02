@@ -1,20 +1,22 @@
-# מדריך שימוש - SmartIVR Embedding
+# User Guide - SmartIVR Embedding
 
-## טעינת ה-SDK
+## Loading the SDK
 
-הוסף את ה-script tag ל-HTML שלך:
+Add the following script tag to your HTML:
 
 ```html
 <script src="https://smart-ivr.co.il/embedding.js"></script>
+
 ```
 
+## Basic Usage
 
-## שימוש בסיסי
+### 1. Connecting to a System (Recommended)
 
-### 1. חיבור למערכת (מומלץ) - בודק אם המערכת קיימת
+This method checks if the system already exists. If it does, it provides a connection link; otherwise, it initiates the embedding process.
 
 ```javascript
-// לאחר טעינת ה-script, SmartIVREmbedding יהיה זמין ב-window
+// Once the script is loaded, SmartIVREmbedding is available on the window object
 
 const systemData = {
   username: '0770000000',
@@ -24,33 +26,34 @@ const systemData = {
   name: 'MyIvr'
 };
 
-// חיבור למערכת - בודק אם קיימת, אם כן מחזיר קישור, אחרת פותח הטמעה
+// Connect to system - checks for existence, returns link if found, otherwise opens embedding
 SmartIVREmbedding.connect(systemData)
   .then(result => {
     if (result) {
       if (result.connected) {
-        // המערכת כבר קיימת - יש קישור התחברות
-        console.log('✅ מערכת קיימת!', result.connectionLink);
-        // ניתן לפתוח את הקישור
+        // System already exists - connection link provided
+        console.log('✅ System exists!', result.connectionLink);
+        // You can open the link automatically
         window.open(result.connectionLink, '_blank');
       } else {
-        // זו הטמעה חדשה
-        console.log('הטמעה הצליחה!', result);
-        console.log('מזהה מערכת:', result.systemId);
-        console.log('קישור התחברות:', result.connectionLink);
+        // This is a new embedding
+        console.log('Embedding successful!', result);
+        console.log('System ID:', result.systemId);
+        console.log('Connection Link:', result.connectionLink);
       }
     } else {
-      console.log('המשתמש ביטל את ההטמעה');
+      console.log('User cancelled the embedding');
     }
   })
   .catch(error => {
-    console.error('שגיאה:', error);
+    console.error('Error:', error);
   });
+
 ```
 
-## אפשרויות מתקדמות
+## Advanced Options
 
-### התאמת גודל החלונית
+### Customizing the Popup Size
 
 ```javascript
 SmartIVREmbedding.openPopup(systemData, {
@@ -60,35 +63,43 @@ SmartIVREmbedding.openPopup(systemData, {
   .then(result => {
     // ...
   });
+
 ```
 
 ## API Reference
 
 ### `SmartIVREmbedding.connect(systemData, options)`
 
-**מומלץ לשימוש** - בודק אם המערכת קיימת לפי systemId. אם קיימת - מחזיר קישור התחברות, אחרת פותח הטמעה.
+**Recommended Use Case**: Checks if a system exists based on the `systemId`. If it exists, it returns a login link; otherwise, it opens the embedding popup.
 
 **Parameters:**
-- `systemData` (Object): פרטי המערכת
-  - `username` (string): מספר מערכת
-  - `password` (string, optional): סיסמה
-  - `apiKey` (string, optional): מפתח API
-  - `systemId` (string, **חובה**): מזהה מערכת מהפרויקט שלכם
-  - `name` (string, optional): שם המערכת
-- `options` (Object, optional):
-  - `encryptionKey` (string): מפתח הצפנה (default: נוצר אוטומטית)
-  - `width` (number): רוחב החלונית (default: 550)
-  - `height` (number): גובה החלונית (default: 700)
 
-**Returns:** Promise<Object|null>
-- `success` (boolean): האם הפעולה הצליחה
-- `connected` (boolean): **true** אם המערכת כבר קיימת, **false** אם זו הטמעה חדשה
-- `systemIndex` (number): אינדקס המערכת
-- `systemId` (string): מזהה המערכת
-- `connectionLink` (string): קישור להתחברות למערכת
-- `system` (Object): פרטי המערכת
+* `systemData` (Object): System details
+* `username` (string): System phone number/identifier.
+* `password` (string, optional): Password.
+* `apiKey` (string, optional): API Key.
+* `systemId` (string, **Required**): The system identifier from your project.
+* `name` (string, optional): System name.
 
-**דוגמה:**
+
+* `options` (Object, optional):
+* `encryptionKey` (string): Encryption key (default: automatically generated).
+* `width` (number): Popup width (default: 550).
+* `height` (number): Popup height (default: 700).
+
+
+
+**Returns:** `Promise<Object|null>`
+
+* `success` (boolean): Whether the operation was successful.
+* `connected` (boolean): **true** if the system already existed, **false** if it was a new embedding.
+* `systemIndex` (number): The system index.
+* `systemId` (string): The system identifier.
+* `connectionLink` (string): Direct login link to the system.
+* `system` (Object): Full system details.
+
+**Example:**
+
 ```javascript
 const result = await SmartIVREmbedding.connect({
   username: '0770000000',
@@ -98,12 +109,12 @@ const result = await SmartIVREmbedding.connect({
 
 if (result) {
   if (result.connected) {
-    // המערכת קיימת - פתח את הקישור
+    // System exists - redirect to link
     window.location.href = result.connectionLink;
   } else {
-    // זו הטמעה חדשה
-    console.log('הטמעה הושלמה:', result.connectionLink);
+    // New embedding completed
+    console.log('Embedding complete:', result.connectionLink);
   }
 }
-```
 
+```
